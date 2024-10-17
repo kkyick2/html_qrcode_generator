@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Text QR Code Generator</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Include the QR code generator library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Text QR Code Generator</h1>
+      <p>
+        Enter text or a link to generate a text-based QR code that you can copy
+        and paste.
+      </p>
+      <input type="text" id="data-input" placeholder="Enter text or URL here" />
+      <br />
+      <button onclick="generateQRCode()">Generate QR Code</button>
+      <p class="notice">
+        Note: The QR code may appear distorted if not viewed in a monospace
+        font.
+      </p>
+      <div id="qr-code-display" class="qr-code"></div>
+    </div>
+
+    <script>
+      function generateQRCode() {
+        var data = document.getElementById("data-input").value.trim();
+        if (!data) {
+          alert("Please enter some data.");
+          return;
+        }
+
+        // Generate QR code using the QRCode library
+        var qr = qrcode(0, "L");
+        qr.addData(data);
+        qr.make();
+
+        // Get the QR code module count
+        var moduleCount = qr.getModuleCount();
+
+        // Build the text-based QR code
+        var qrText = "";
+        for (var row = 0; row < moduleCount; row++) {
+          for (var col = 0; col < moduleCount; col++) {
+            qrText += qr.isDark(row, col) ? "█" : " ";
+          }
+          qrText += "\n";
+        }
+
+        // Display the QR code
+        var qrCodeDisplay = document.getElementById("qr-code-display");
+        qrCodeDisplay.textContent = qrText;
+      }
+    </script>
+  </body>
+</html>
